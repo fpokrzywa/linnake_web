@@ -13,3 +13,13 @@
 .form-trap{position:absolute!important;left:-10000px!important;width:1px!important;height:1px!important;overflow:hidden!important}button:disabled{cursor:default;opacity:.65}#inquiry-status[data-state="error"]{color:#ffb8b8}#inquiry-status[data-state="success"]{padding:16px;border:1px solid #42738b;background:#132b38;border-radius:6px;overflow-wrap:anywhere}
 
 #inquiry-form[data-submitted="true"] > :not(#inquiry-status){display:none}
+
+/* Show the supplied full logo, trimming only its outer whitespace in layout.
+   CSS inversion and blending provide white artwork on the existing dark header;
+   the source image is preserved unchanged. */
+.header-logo{position:relative;display:block;flex:0 0 auto;width:182px;height:110px;overflow:hidden}
+.header-logo img{position:absolute;width:273px;max-width:none;height:auto;left:-46px;top:-16px;filter:grayscale(1) invert(1);mix-blend-mode:screen}
+.header-inner{min-height:124px}
+html{scroll-padding-top:146px}
+@media(max-width:850px){.header-logo{width:146px;height:86px}.header-logo img{width:221px;left:-37px;top:-13px}.header-inner{min-height:104px}.site-header nav{top:104px}}
+@media(max-width:600px){.header-logo{width:142px;height:84px}.header-logo img{width:215px;left:-36px;top:-13px}.header-inner{min-height:100px}.site-header nav{top:100px}html{scroll-padding-top:122px}}

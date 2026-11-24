@@ -1,6 +1,6 @@
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { resolve } from 'node:path';
-const files = { '/index.html': 'text/html; charset=utf-8', '/styles.css': 'text/css; charset=utf-8', '/app.js': 'text/javascript; charset=utf-8', '/assets/linnake-crest.jpg': 'image/jpeg' };
+const files = { '/index.html': 'text/html; charset=utf-8', '/styles.css': 'text/css; charset=utf-8', '/app.js': 'text/javascript; charset=utf-8', '/assets/linnake-crest.jpg': 'image/jpeg', '/assets/linnake-header-logo.png': 'image/png' };
 const assets = Object.fromEntries(Object.entries(files).map(([url, type]) => [url, { type, data: readFileSync(resolve('public', `.${url}`)).toString('base64') }]));
 const manifest = JSON.parse(readFileSync('.openai/hosting.json', 'utf8'));
 if (manifest.static || manifest.d1 !== 'DB') throw new Error('Worker manifest must use DB and omit static.');
