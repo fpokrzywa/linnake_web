@@ -2,6 +2,12 @@
 
 Responsive marketing site with direct inquiry capture. Authored page assets live in `public/`; `worker/index.mjs` handles the inquiry endpoint. `npm run build` embeds the page and assets into a single Worker module at `dist/server/index.js`.
 
+Source repository: https://github.com/fpokrzywa/linnake_web
+
+Private hosted site: https://linnake-ai-platform.fpokrzywa.chatgpt.site/
+
+GitHub stores the website source, assets, migrations, and tests. Pushing to GitHub does not automatically deploy the Sites-hosted website. Database records, local preview state, credentials, and installed dependencies are excluded from this repository.
+
 ## Run and validate
 
 Use `npm ci`, `npm run db:generate` only when the schema changes, `npm test`, `npm run build`, and `npm run dev`. The local preview is http://127.0.0.1:4173 and stores test records in ignored `.local/preview.sqlite`. Local storage is separate from production Cloudflare D1.

@@ -17,9 +17,9 @@
 /* Show the supplied full logo, trimming only its outer whitespace in layout.
    CSS inversion and blending provide white artwork on the existing dark header;
    the source image is preserved unchanged. */
-.header-logo{position:relative;display:block;flex:0 0 auto;width:182px;height:110px;overflow:hidden}
-.header-logo img{position:absolute;width:273px;max-width:none;height:auto;left:-46px;top:-16px;filter:grayscale(1) invert(1);mix-blend-mode:screen}
-.header-inner{min-height:124px}
-html{scroll-padding-top:146px}
-@media(max-width:850px){.header-logo{width:146px;height:86px}.header-logo img{width:221px;left:-37px;top:-13px}.header-inner{min-height:104px}.site-header nav{top:104px}}
-@media(max-width:600px){.header-logo{width:142px;height:84px}.header-logo img{width:215px;left:-36px;top:-13px}.header-inner{min-height:100px}.site-header nav{top:100px}html{scroll-padding-top:122px}}
+.header-logo{position:relative;display:block;flex:0 0 auto;width:248px;height:150px;overflow:hidden}
+.header-logo img{position:absolute;width:372px;max-width:none;height:auto;left:-63px;top:-22px;filter:grayscale(1) invert(1);mix-blend-mode:screen}
+.header-inner{min-height:168px}
+html{scroll-padding-top:190px}
+@media(max-width:850px){.header-logo{width:210px;height:126px}.header-logo img{width:316px;left:-53px;top:-19px}.header-inner{min-height:144px}.site-header nav{top:144px}html{scroll-padding-top:166px}}
+@media(max-width:600px){.header-logo{width:196px;height:118px}.header-logo img{width:295px;left:-50px;top:-18px}.header-inner{min-height:136px}.site-header nav{top:136px}html{scroll-padding-top:158px}}
