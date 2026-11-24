@@ -13,3 +13,9 @@ Found and corrected a missing space in the FAQ heading at the tablet breakpoint 
 Sanakirja.org lists stronghold, fortress, and fort among translations of linnake, with both literal fortification and figurative stronghold meanings: https://www.sanakirja.org/search.php?id=185563&l2=3
 
 Added a short sourced “Why Linnake?” section. The brand interpretation is a lasting foundation for customized AI, chosen infrastructure, and continuous improvement. It does not assert Finnish company origins, security certifications, or guaranteed protection.
+
+## Direct submissions — 2026-11-24
+
+Replaced email drafts with a Worker POST endpoint and D1 storage. Four automated tests exercise persistence for demo and enterprise inquiries, stable receipts on retry, duplicate prevention, server field validation, malformed and oversized requests, cross-origin rejection, honeypot rejection, per-email throttling, failed-storage responses, and absence of a public read endpoint. These tests use SQLite with the same generated SQL migrations and bound queries as production. A local browser submission successfully returned a stored receipt.
+
+The earlier email-draft and copy tests describe the previous version and no longer apply. Runtime code has no npm dependencies; Drizzle packages are development-only schema-generation tools.

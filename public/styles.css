@@ -9,3 +9,7 @@
 @media(max-width:850px){.name-story{gap:40px;margin-bottom:75px}}
 @media(max-width:600px){.name-story{grid-template-columns:1fr;gap:25px;padding:35px 0;margin-bottom:65px}.name-story-copy>p{font-size:.94rem}.name-story-copy>p:first-child{font-size:1.03rem}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{animation:none!important;transition:none!important}}
+
+.form-trap{position:absolute!important;left:-10000px!important;width:1px!important;height:1px!important;overflow:hidden!important}button:disabled{cursor:default;opacity:.65}#inquiry-status[data-state="error"]{color:#ffb8b8}#inquiry-status[data-state="success"]{padding:16px;border:1px solid #42738b;background:#132b38;border-radius:6px;overflow-wrap:anywhere}
+
+#inquiry-form[data-submitted="true"] > :not(#inquiry-status){display:none}

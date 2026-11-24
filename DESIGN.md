@@ -12,6 +12,6 @@ Layout: navigation; split hero with crest; four-stage lifecycle explorer and lab
 
 ## Implementation decisions
 
-Buildless accessible HTML/CSS/JavaScript, responsive and reduced-motion aware. Native details for FAQ, accessible lifecycle tabs, mobile navigation, native dialog for inquiries. Inquiry form creates an email draft; it does not imply server-side lead capture. Until a Linnake destination is supplied, use the verified existing ModelForge contact address, with explicit UI disclosure.
+Accessible HTML/CSS/JavaScript, responsive and reduced-motion aware. Native details for FAQ, accessible lifecycle tabs, mobile navigation, native dialog for inquiries. A Worker serves embedded assets and accepts direct inquiry submissions into a private D1 database. It uses server validation, bounded request size, idempotency, basic abuse controls, and honest pending/error/success states. The website privacy text explains inquiry storage. Email notifications are not configured.
 
 Source facts: user instructions and https://modelforge.studio/. The linked architecture plan was inaccessible. Continuous fine-tuning specifics are described as a product direction and consultation topic, not unverified autonomous deployment behavior. Dashboard is explicitly illustrative. New Sites hosting remains private for review.
