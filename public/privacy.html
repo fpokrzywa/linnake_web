@@ -22,7 +22,17 @@
     <section>
       <p>When you submit the readiness form, Linnake stores your first name, work email, company size, task, hardware answer, score, and submission details in the site’s hosted database. Linnake uses them to prepare your scorecard and follow up on your request.</p>
       <p>The site does not add advertising trackers or save form entries in browser storage. The hosting service may process access logs and authentication information to operate the site. Readiness submissions are not publicly listed.</p>
-      <p>For questions about your submission or to request deletion, email <a class="text-link" href="mailto:contact@modelforge.studio">contact@modelforge.studio</a>.</p>
+      <p id="deletion-contact">To request deletion, reply to any email we've sent you.</p>
+      <script>
+        const LINNAKE_CONTACT_EMAIL = '';
+        if (/^[^\s@<>\[\]]+@[^\s@<>\[\]]+\.[^\s@<>\[\]]+$/.test(LINNAKE_CONTACT_EMAIL)) {
+          const link = document.createElement('a');
+          link.className = 'text-link';
+          link.href = 'mailto:' + LINNAKE_CONTACT_EMAIL;
+          link.textContent = LINNAKE_CONTACT_EMAIL;
+          document.getElementById('deletion-contact').replaceChildren('To request deletion, email ', link, '.');
+        }
+      </script>
     </section>
   </main>
   <footer class="site-footer landing-footer wrap">
