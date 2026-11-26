@@ -5,7 +5,7 @@
   "scripts": {
     "build": "node scripts/build.mjs",
     "dev": "node scripts/preview.mjs",
-    "test": "node --test tests/inquiries.test.mjs",
+    "test": "node --test tests/*.test.mjs",
     "db:generate": "drizzle-kit generate"
   },
   "devDependencies": {

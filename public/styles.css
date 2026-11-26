@@ -23,3 +23,77 @@
 html{scroll-padding-top:190px}
 @media(max-width:850px){.header-logo{width:210px;height:126px}.header-logo img{width:316px;left:-53px;top:-19px}.header-inner{min-height:144px}.site-header nav{top:144px}html{scroll-padding-top:166px}}
 @media(max-width:600px){.header-logo{width:196px;height:118px}.header-logo img{width:295px;left:-50px;top:-18px}.header-inner{min-height:136px}.site-header nav{top:136px}html{scroll-padding-top:158px}}
+
+/* Landing page and supporting routes use the existing brand tokens. */
+.site-header .header-inner { min-height: 92px; }
+.header-logo { width: 136px; height: 82px; }
+.header-logo img { width: 204px; left: -34px; top: -12px; }
+html { scroll-padding-top: 105px; }
+.site-header nav { position: static; display: flex; align-items: center; gap: 24px; padding: 0; border: 0; background: none; font-size: .9rem; }
+.site-header nav > a { padding: 10px 0; font-size: inherit; }
+.readiness-hero { grid-template-columns: minmax(0, 1.2fr) minmax(0, .8fr); gap: 48px; padding-block: 52px; }
+.readiness-hero h1 { font-size: clamp(2.7rem, 5.2vw, 5.2rem); text-wrap: balance; }
+.readiness-hero .hero-description { margin: 20px 0 0; }
+.readiness-crest { width: 150px; margin: 18px 0 0; }
+.readiness-column { min-width: 0; }
+.readiness-card { padding: 26px; min-height: 0; }
+.readiness-card fieldset { min-width: 0; padding: 0; border: 0; margin: 0; }
+.readiness-card label { margin-bottom: 13px; }
+.readiness-card .button { width: 100%; }
+.readiness-card input, .readiness-card select { margin-top: 4px; min-height: 44px; padding-block: 9px; }
+.readiness-actions { display: flex; gap: 15px; align-items: center; }
+.readiness-actions .text-link { min-height: 44px; padding: 0 6px; }
+.readiness-proof { font-size: .9rem; color: var(--muted); margin: 12px 0 0; }
+#readiness-error { color: #ffb8b8; font-size: .9rem; margin: 10px 0 0; }
+#readiness-error:empty { display: none; }
+#score-heading { color: var(--ice); }
+#readiness-result > p { margin: 8px 0 0; }
+.score-rules { margin: 10px 0; }
+.score-rules summary { padding-block: 8px; }
+.score-rules summary::after { top: 17px; }
+.score-rules p { font-size: .875rem; margin-bottom: 8px; }
+.readiness-details section { border-top: 1px solid var(--line); padding: 29px 0; }
+.readiness-details h2 { font-size: clamp(1.8rem, 4vw, 2.7rem); }
+.readiness-details li { color: var(--muted); line-height: 1.55; margin: 6px 0; }
+.readiness-details ul, .readiness-details ol { padding-left: 22px; margin: 12px 0 0; }
+.readiness-details p { margin-bottom: 0; }
+.readiness-details p + p { margin-top: 6px; }
+.closing-inner .button { margin-top: 23px; }
+.landing-footer { display: block; padding: 26px 0; }
+.landing-footer .footer-links { justify-content: flex-start; padding: 0 0 16px; gap: 10px 24px; }
+.landing-footer .footer-bottom { padding-top: 15px; }
+.support-content { max-width: 860px; }
+.support-content h1 { margin-bottom: 30px; }
+.support-content section + section { margin-top: 32px; }
+.support-content h2 { font-size: clamp(1.65rem, 3.5vw, 2.5rem); margin-bottom: 12px; }
+.support-content p { color: var(--muted); }
+
+@media (max-width: 850px) {
+  .readiness-hero { gap: 28px; }
+  .readiness-card { padding: 20px; }
+}
+@media (max-width: 680px) {
+  .site-header { position: relative; }
+  html { scroll-padding-top: 12px; }
+  .site-header .header-inner { min-height: 72px; gap: 10px; }
+  .header-logo { width: 116px; height: 70px; }
+  .header-logo img { width: 174px; left: -29px; top: -10px; }
+  .site-header nav { gap: 16px; }
+  .readiness-hero { grid-template-columns: 1fr; gap: 15px; padding-block: 18px 24px; }
+  .readiness-hero .hero-copy { padding: 0; }
+  .readiness-hero h1 { font-size: clamp(1.95rem, 8.5vw, 3.4rem); line-height: 1.05; }
+  .readiness-hero .hero-description { margin-top: 9px; line-height: 1.38; }
+  .readiness-crest { display: none; }
+  .readiness-card { padding: 13px 16px; }
+  .readiness-card label { margin-bottom: 7px; line-height: 1.25; }
+  .readiness-hero .readiness-card .button { min-height: 44px; padding: 9px 12px; }
+  .readiness-proof { margin-top: 7px; line-height: 1.4; }
+}
+@media (max-width: 380px) {
+  .readiness-hero { width: calc(100% - 32px); }
+  .readiness-hero h1 { font-size: clamp(1.73rem, 8vw, 1.95rem); text-wrap: wrap; }
+  .readiness-card .readiness-size { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+  .readiness-size select { flex: 0 1 9rem; margin-top: 0; }
+  .readiness-actions { gap: 8px; }
+  .readiness-hero .readiness-actions .button { padding-inline: 7px; }
+}

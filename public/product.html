@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#060b12">
+  <title>Linnake | Product</title>
+  <meta name="description" content="Explore Linnake’s private AI platform.">
+  <link rel="icon" href="/assets/linnake-crest.jpg" type="image/jpeg">
+  <link rel="stylesheet" href="/styles.css">
+  <script src="/app.js" defer></script>
+</head>
+<body class="support-page">
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <div class="header-inner wrap">
+      <a class="header-logo" href="/" aria-label="Linnake home"><img src="/assets/linnake-header-logo.png" width="1774" height="887" alt="Linnake"></a>
+      <nav aria-label="Main navigation"><a href="/security">Security</a><a href="/pricing">Pricing</a></nav>
+    </div>
+  </header>
+  <main id="main">
+    <section class="hero wrap">
+      <div class="hero-copy"><h1>Build your private AI.</h1><p class="hero-description">An open-source model trained on your company’s data and run on your hardware or a dedicated GPU.</p><p>We’re building Linnake with a small group of early clients who help shape the product.</p></div>
+      <div class="hero-art"><img src="/assets/linnake-crest.jpg" width="1024" height="1024" alt="Linnake’s silver fortress and mountain crest"></div>
+    </section>
+    <section class="section wrap" id="platform" aria-labelledby="platform-heading">
+      <div class="section-heading"><div><p class="section-label">One connected platform</p><h2 id="platform-heading">The whole lifecycle.<br>One place to work.</h2></div><p>Start with a model. Make it your own. Take it into the world. Keep building on what works.</p></div>
+      <div class="platform-explorer">
+        <div class="lifecycle" role="tablist" aria-label="Explore the model lifecycle" aria-orientation="vertical">
+          <button id="tab-prepare" class="lifecycle-tab" role="tab" aria-selected="true" aria-controls="panel-prepare" tabindex="0"><span>Explore & prepare</span><small>Find your foundation. Shape your data.</small></button>
+          <button id="tab-tune" class="lifecycle-tab" role="tab" aria-selected="false" aria-controls="panel-tune" tabindex="-1"><span>Fine-tune</span><small>Turn a general model into your model.</small></button>
+          <button id="tab-deploy" class="lifecycle-tab" role="tab" aria-selected="false" aria-controls="panel-deploy" tabindex="-1"><span>Evaluate & deploy</span><small>Compare results. Choose where it runs.</small></button>
+          <button id="tab-improve" class="lifecycle-tab" role="tab" aria-selected="false" aria-controls="panel-improve" tabindex="-1"><span>Keep improving</span><small>Bring your model forward with your business.</small></button>
+        </div>
+        <div class="workspace">
+          <div class="workspace-bar"><span>Linnake workspace</span><span>Illustrative product concept</span></div>
+          <div id="panel-prepare" class="tab-panel" role="tabpanel" aria-labelledby="tab-prepare" tabindex="0">
+            <div class="panel-title"><p>Explore & prepare</p><h3>A strong model starts<br>with a strong foundation.</h3></div>
+            <div class="data-table"><div class="data-row"><span>Model explorer</span><strong>Llama, Mistral, Phi, Gemma</strong></div><div class="data-row"><span>Dataset formats</span><strong>CSV, JSON, Parquet</strong></div><div class="data-row"><span>Preparation</span><strong>Clean, validate, version</strong></div></div>
+            <p class="panel-description">Compare model architectures and sizes. Prepare your datasets with deduplication, tokenization, and validation splits before training begins.</p>
+          </div>
+          <div id="panel-tune" class="tab-panel" role="tabpanel" aria-labelledby="tab-tune" tabindex="0" hidden>
+            <div class="panel-title"><p>Fine-tune</p><h3>Your expertise.<br>Your model’s next chapter.</h3></div>
+            <div class="method-options"><span>LoRA</span><span>QLoRA</span><span>Full fine-tuning</span></div>
+            <div class="data-table"><div class="data-row"><span>Configure</span><strong>Guided visual controls</strong></div><div class="data-row"><span>Monitor</span><strong>Loss, progress, GPU utilization</strong></div><div class="data-row"><span>Preserve</span><strong>Versions and checkpoints</strong></div></div>
+            <p class="panel-description">Shape model behavior around your tasks and data. Follow training progress and manage checkpoints from a connected workspace.</p>
+          </div>
+          <div id="panel-deploy" class="tab-panel" role="tabpanel" aria-labelledby="tab-deploy" tabindex="0" hidden>
+            <div class="panel-title"><p>Evaluate & deploy</p><h3>Know what changed.<br>Choose where it runs.</h3></div>
+            <div class="deployment-paths"><span>Local device</span><span>On-premises</span><span>Cloud</span></div>
+            <div class="data-table"><div class="data-row"><span>Evaluate</span><strong>Benchmarks and your test sets</strong></div><div class="data-row"><span>Compare</span><strong>Model versions side by side</strong></div><div class="data-row"><span>Export & serve</span><strong>Hugging Face, ONNX, REST</strong></div></div>
+            <p class="panel-description">Move from training to deployment with evaluation in the workflow. Model, export, and hardware compatibility determine the available deployment path.</p>
+          </div>
+          <div id="panel-improve" class="tab-panel" role="tabpanel" aria-labelledby="tab-improve" tabindex="0" hidden>
+            <div class="panel-title"><p>Continuous fine-tuning</p><h3>Your business changes.<br>Your AI should keep up.</h3></div>
+            <div class="improvement-loop"><span>New inputs</span><span>Fine-tune</span><span>Evaluate</span><span>Next version</span></div>
+            <p class="panel-description">Linnake extends the initial model workflow into ongoing improvement. Bring new data and changing requirements into the next fine-tuning cycle.</p><p class="panel-note">Update cadence and deployment controls are defined around your use case.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="continuous-section" id="continuous" aria-labelledby="continuous-heading"><div class="wrap continuous-grid">
+      <div><p class="section-label">Beyond the first fine-tune</p><h2 id="continuous-heading">Your first model<br>is a starting point.</h2><p class="large-copy">Your products change. Your processes improve. Your model should have a path to evolve with them.</p><a class="text-link" href="#faq">Understand continuous fine-tuning</a></div>
+      <div class="continuous-content"><p>Linnake connects initial model creation with ongoing fine-tuning, so the work you put into your AI can continue to grow in value.</p><div class="continuous-item"><h3>Bring in what’s new</h3><p>Use updated examples, revised workflows, and domain-specific data to inform the next training cycle.</p></div><div class="continuous-item"><h3>Measure the difference</h3><p>Evaluate new versions against the tasks that matter to you. More training alone is not proof of a better model.</p></div><div class="continuous-item"><h3>Move forward deliberately</h3><p>Plan model updates around your operating needs, with evaluation and version management as part of the process.</p></div></div>
+    </div></section>
+
+  </main>
+  <footer class="site-footer landing-footer wrap">
+    <nav class="footer-links" aria-label="Footer"><a href="/security">Security</a><a href="/pricing">Pricing</a><a href="/privacy">Privacy</a><a href="/terms">Terms</a><a href="/product">Product</a></nav>
+    <div class="footer-bottom">© 3C Publications LLC.</div>
+  </footer>
+</body>
+</html>

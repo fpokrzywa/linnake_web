@@ -1,10 +1,10 @@
 # Linnake website
 
-Responsive marketing site with direct inquiry capture. Authored page assets live in `public/`; `worker/index.mjs` handles the inquiry endpoint. `npm run build` embeds the page and assets into a single Worker module at `dist/server/index.js`.
+Private AI readiness landing page with a two-step form and instant scoring. Authored page assets live in `public/`; `worker/index.mjs` handles the inquiry endpoint. `npm run build` embeds the page and assets into a single Worker module at `dist/server/index.js`.
 
 Source repository: https://github.com/fpokrzywa/linnake_web
 
-Private hosted site: https://linnake-ai-platform.fpokrzywa.chatgpt.site/
+Hosted site: https://linnake-ai-platform.fpokrzywa.chatgpt.site/
 
 GitHub stores the website source, assets, migrations, and tests. Pushing to GitHub does not automatically deploy the Sites-hosted website. Database records, local preview state, credentials, and installed dependencies are excluded from this repository.
 
@@ -24,8 +24,12 @@ The site owner can use Sites Settings' database viewer, or ask Codex to read the
 
 ## Database and deployment
 
-`.openai/hosting.json` preserves the existing Site ID and declares `d1: "DB"`. It no longer uses static hosting. `db/schema.js` is the Drizzle schema, with generated immutable migrations under `drizzle/`. Sites provisions the database and applies these migrations before uploading the Worker. All database access uses bound parameters. Deployment remains owner-private; public access and a custom domain have not been configured.
+`.openai/hosting.json` preserves the existing Site ID and declares `d1: "DB"`. It no longer uses static hosting. `db/schema.js` is the Drizzle schema, with generated immutable migrations under `drizzle/`. Sites provisions the database and applies these migrations before uploading the Worker. All database access uses bound parameters. Sites manages the hosted URL and access policy.
 
-## Product content
+## Readiness leads and scorecards
 
-Linnake incorporates ModelForge's capabilities plus continuous fine-tuning and enterprise local AI on compatible employee devices. No launch dates, pricing, certifications, or autonomous-update claims are invented. Product illustrations are labeled concepts. The Finnish name section links to its dictionary source.
+The homepage posts to `/api/readiness`. The Worker calculates the score and saves the answers, score and point breakdown in `DB` / `readiness_leads` before returning the result. The table is available to the site owner through the Sites database viewer. The existing `inquiries` table and endpoint serve legacy records and submissions.
+
+The 24-hour scorecard is a manual follow-up. Check new rows by submission time, review the client's use case and hardware answer, and email the scorecard to the work email in the row. Include the first three tasks, a hardware feasibility assessment, and a rough cost range. The form does not send email or independently verify hardware. Review model, workload, and machine details before treating the score as a pilot recommendation.
+
+Set `approvedClientQuote` and `bookingUrl` in `public/readiness.js`. The quote field takes one approved line including name, title, and company. With the field blank, the page shows the data-use pledge. The results show a booking link once a real HTTPS URL is configured. Replace `[FOUNDER BIO]` in `public/index.html` with the approved founder line.

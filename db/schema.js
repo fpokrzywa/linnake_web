@@ -16,3 +16,23 @@ export const inquiries = sqliteTable('inquiries', {
   index('inquiries_created_idx').on(table.createdAt),
   check('inquiries_interest_check', sql`${table.interest} IN ('demo', 'enterprise', 'local')`),
 ]);
+
+export const readinessLeads = sqliteTable('readiness_leads', {
+  id: text('id').primaryKey(),
+  requestHash: text('request_hash').notNull(),
+  firstName: text('first_name').notNull(),
+  email: text('email').notNull(),
+  companySize: text('company_size').notNull(),
+  useCase: text('use_case').notNull(),
+  hardware: text('hardware').notNull(),
+  score: integer('score').notNull(),
+  sizePoints: integer('size_points').notNull(),
+  taskPoints: integer('task_points').notNull(),
+  hardwarePoints: integer('hardware_points').notNull(),
+  createdAt: integer('created_at').notNull(),
+  status: text('status').notNull().default('new'),
+}, table => [
+  index('readiness_leads_email_created_idx').on(table.email, table.createdAt),
+  index('readiness_leads_status_created_idx').on(table.status, table.createdAt),
+  check('readiness_leads_score_check', sql`${table.score} BETWEEN 0 AND 100`),
+]);
