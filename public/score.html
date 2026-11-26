@@ -23,7 +23,6 @@
         <div class="workspace readiness-card" id="readiness" tabindex="-1">
           <form id="readiness-form" method="post" action="/score" aria-label="Private AI Readiness Score">
             <label class="form-trap" aria-hidden="true">Website<input name="website" tabindex="-1" autocomplete="off"></label>
-            <input type="hidden" name="requestId" value="REQUEST_ID">
             <fieldset id="lead-step" aria-label="Contact details">
               <label>First name<input name="firstName" autocomplete="given-name" required maxlength="100"></label>
               <label>Work email<input name="email" type="email" autocomplete="email" required maxlength="200"></label>
@@ -56,7 +55,7 @@
               <p id="score-breakdown"></p>
               <p>Company size adds 0–20 points. A task with at least two distinct words adds 20 points. A task with five or more distinct words and a work verb like “review” adds 45 instead. A capable machine adds 35 points. “Not sure” adds 15.</p>
             </details>
-            <p>Your full scorecard hits your inbox in minutes.<span id="booking-invite" hidden> Want it walked through live? <a class="text-link" id="booking-link">Grab 20 minutes.</a></span></p>
+            <p><span id="booking-invite" hidden> Want it walked through live? <a class="text-link" id="booking-link">Grab 20 minutes.</a></span></p>
           </div>
 
         </div>

@@ -145,11 +145,6 @@ async function handleReadiness(request, env) {
   }
 }
 
-function deliveryCopy(html, env) {
-  if (env.EMAIL_API_KEY && env.SENDER_EMAIL && env.OWNER_EMAIL && !/^(true|1)$/i.test(env.EMAIL_TEST_MODE || '')) return html;
-  return html.replaceAll('Your full scorecard hits your inbox in minutes.', 'Scorecard email is currently unavailable.');
-}
-
 function escapeHtml(value) {
   return String(value ?? '').replace(/[&<>"']/g, ch => ({'&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;'}[ch]));
 }
@@ -159,9 +154,9 @@ async function scorePage(request, env, asset) {
   const booking = /^https:\/\//.test(env.BOOKING_URL || '') ? escapeHtml(env.BOOKING_URL) : '';
   const page = body.replace('id="readiness-form"', 'id="readiness-form" data-booking="' + booking + '"');
   function html(content, status = 200) {
-    return new Response(request.method === 'HEAD' ? null : deliveryCopy(content, env), {status, headers:{'Content-Type':'text/html; charset=utf-8','Cache-Control':'no-store','Referrer-Policy':'same-origin'}});
+    return new Response(request.method === 'HEAD' ? null : content, {status, headers:{'Content-Type':'text/html; charset=utf-8','Cache-Control':'no-store','Referrer-Policy':'same-origin'}});
   }
-  if (request.method === 'GET' || request.method === 'HEAD') return html(page.replace('REQUEST_ID',crypto.randomUUID()));
+  if (request.method === 'GET' || request.method === 'HEAD') return html(page);
   if (request.method !== 'POST') return html('Method not allowed',405);
   if (request.headers.get('Origin') !== new URL(request.url).origin) return html('Please submit from the Linnake website.',403);
   if (!request.headers.get('Content-Type')?.startsWith('application/x-www-form-urlencoded')) return html('Invalid form submission.',415);
@@ -177,6 +172,8 @@ async function scorePage(request, env, asset) {
     input += decoder.decode(chunk.value,{stream:true});
   }
   const fields = Object.fromEntries(new URLSearchParams(input + decoder.decode()));
+  // Keep the no-JavaScript contact step working without an ID in the initial page.
+  if (!fields.requestId && !fields.companySize && !('hardware' in fields)) fields.requestId = crypto.randomUUID();
   const replaceForm = content => page.replace(/<form id="readiness-form"[\s\S]*?<\/form>/, () => content);
   const fail = (message,status) => html(replaceForm('<p role="alert">' + escapeHtml(message) + '</p><a class="text-link" href="/score">Return to the form</a>'),status);
   if (!uuid.test(fields.requestId) || fields.website) return fail('Please start the form again.',400);
@@ -192,7 +189,7 @@ async function scorePage(request, env, asset) {
   const p = data.points;
   const hosted = fields.hardware === 'no' ? '<p>No hardware yet? Hosted GPU is an option. Billed by the second.</p>' : '';
   const next = booking ? ' Want it walked through live? <a class="text-link" href="' + booking + '">Grab 20 minutes.</a>' : '';
-  return html(replaceForm('<h2>' + data.score + '/100</h2><p>' + escapeHtml(data.meaning) + '</p>' + hosted + '<details><summary>How we scored it</summary><p>Company size: ' + p.size + '/20. Task: ' + p.task + '/45. Hardware: ' + p.hardware + '/35.</p></details><p>Your full scorecard hits your inbox in minutes.' + next + '</p>'));
+  return html(replaceForm('<h2>' + data.score + '/100</h2><p>' + escapeHtml(data.meaning) + '</p>' + hosted + '<details><summary>How we scored it</summary><p>Company size: ' + p.size + '/20. Task: ' + p.task + '/45. Hardware: ' + p.hardware + '/35.</p></details>' + (next ? '<p>' + next + '</p>' : '')));
 }
 
 const pageRoutes = {
@@ -217,8 +214,7 @@ export function createWorker(assets = {}) {
       const asset = assets[pageRoutes[path.replace(/(.+)\/$/, '$1')] ?? path];
       if (!asset) return new Response('Not found', { status: 404 });
       const body = request.method === 'HEAD' ? null : Uint8Array.from(atob(asset.data), char => char.charCodeAt(0));
-      const output = body && (path === '/' || path === '/index.html') ? deliveryCopy(new TextDecoder().decode(body), env) : body;
-      return new Response(output, { headers: { 'Content-Type': asset.type, 'Cache-Control': 'no-cache', 'X-Content-Type-Options': 'nosniff', 'Referrer-Policy': 'strict-origin-when-cross-origin' } });
+      return new Response(body, { headers: { 'Content-Type': asset.type, 'Cache-Control': 'no-cache', 'X-Content-Type-Options': 'nosniff', 'Referrer-Policy': 'strict-origin-when-cross-origin' } });
     }
   };
 }
