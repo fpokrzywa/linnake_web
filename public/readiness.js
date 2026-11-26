@@ -7,16 +7,65 @@ const settings = {
 };
 
 const usable = value => value.trim() && !/[\[\]]/.test(value);
-const price = document.getElementById('hosted-price');
-if (price && usable(settings.hostedRate)) price.textContent = 'No hardware yet? Hosted GPU, billed per second of use: ' + settings.hostedRate;
-if (document.getElementById('readiness-form')) initializeForm();
-
-function initializeForm() {
 const founder = document.getElementById('founder');
-if (usable(settings.founderBio)) {
+if (founder && usable(settings.founderBio)) {
   founder.textContent = settings.founderBio;
   founder.hidden = false;
 }
+if (document.getElementById('readiness-proof') && usable(settings.approvedClientQuote)) {
+  document.getElementById('readiness-proof').textContent = settings.approvedClientQuote.trim();
+}
+const directForm = document.getElementById('readiness-form');
+if (directForm) initializeForm();
+let modal;
+let opener;
+let loading;
+async function openScore(trigger) {
+  opener = trigger;
+  if (!modal) {
+    loading ??= fetch('/score').then(async response => {
+      if (!response.ok) throw Error();
+      const page = new DOMParser().parseFromString(await response.text(), 'text/html');
+      const card = page.querySelector('.readiness-card');
+      if (!card) throw Error();
+      const dialog = document.createElement('dialog');
+      dialog.className = 'score-dialog';
+      dialog.setAttribute('aria-label','Get your Private AI Readiness Score');
+      const close = document.createElement('button');
+      close.className = 'close-dialog';
+      close.type = 'button';
+      close.textContent = '×';
+      close.setAttribute('aria-label','Close');
+      dialog.append(close, card);
+      document.body.append(dialog);
+      close.onclick = () => dialog.close();
+      dialog.onclick = event => { if (event.target === dialog) dialog.close(); };
+      dialog.onkeydown = event => {
+        if (event.key !== 'Tab') return;
+        const controls = [...dialog.querySelectorAll('button, input, select, a[href], summary')].filter(el => el.tabIndex >= 0 && !el.matches(':disabled') && el.getClientRects().length);
+        const first = controls[0], last = controls.at(-1);
+        if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); }
+        if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
+      };
+      dialog.onclose = () => { document.body.classList.remove('modal-open'); opener?.focus(); };
+      initializeForm();
+      modal = dialog;
+    });
+    try { await loading; } catch { location.assign('/score'); return; }
+  }
+  if (typeof modal.showModal !== 'function') { location.assign('/score'); return; }
+  if (!modal.open) modal.showModal();
+  document.body.classList.add('modal-open');
+  modal.querySelector('#readiness-result:not([hidden]) h2, fieldset:not([hidden]) input, fieldset:not([hidden]) select')?.focus();
+}
+document.querySelectorAll('a[href="/score"]').forEach(link => link.addEventListener('click',event => {
+  if (event.ctrlKey || event.metaKey || event.shiftKey || event.altKey || !window.HTMLDialogElement) return;
+  event.preventDefault();
+  openScore(link);
+}));
+if (!directForm && location.hash === '#readiness') openScore(document.querySelector('a[href="/score"]'));
+
+function initializeForm() {
 const form = document.getElementById('readiness-form');
 const contact = document.getElementById('lead-step');
 const business = document.getElementById('business-step');
@@ -26,9 +75,7 @@ const scoreHeading = document.getElementById('score-heading');
 let previousPayload;
 let requestId;
 
-if (usable(settings.approvedClientQuote)) {
-  document.getElementById('readiness-proof').textContent = settings.approvedClientQuote.trim();
-}
+settings.bookingUrl = form.dataset.booking || settings.bookingUrl;
 if (settings.bookingUrl.startsWith('https://')) {
   document.getElementById('booking-link').href = settings.bookingUrl;
   document.getElementById('booking-invite').hidden = false;
@@ -102,7 +149,7 @@ form.addEventListener('submit', async (event) => {
     document.getElementById('score-breakdown').textContent = `Company size: ${data.points.size}/20. Task: ${data.points.task}/45. Hardware: ${data.points.hardware}/35.`;
     form.hidden = true;
     result.hidden = false;
-    scoreHeading.focus();
+    if (!form.closest('dialog') || form.closest('dialog').open) scoreHeading.focus();
   } catch (error) {
     errorMessage.textContent = error instanceof SyntaxError || !error.message
       ? 'Your score couldn’t load. Your answers are still here. Try again.'

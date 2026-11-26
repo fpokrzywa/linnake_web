@@ -1,3 +1,5 @@
+import { handleRetryTick } from './retry-scheduler.mjs';
+import { deliverScorecard, scoreMeaning, retryDue } from './mail.mjs';
 const MAX_BODY_BYTES = 16384;
 const allowedInterests = new Set(['demo', 'enterprise', 'local']);
 const headers = { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store', 'X-Content-Type-Options': 'nosniff' };
@@ -82,13 +84,6 @@ function scoreTask(useCase) {
   return words.size >= 5 && workVerbs.test(useCase) ? 45 : 20;
 }
 
-function scoreMeaning(score, hardware) {
-  if (hardware === 'yes' && score >= 70) return 'You’re ready to scope a pilot on your own hardware.';
-  if (score >= 70) return 'You’re ready to scope a pilot.';
-  if (score >= 40) return 'You have a starting point. Confirm the task or hardware first.';
-  return 'Define one task and check what it would take to run it.';
-}
-
 async function handleReadiness(request, env) {
   if (request.method !== 'POST') return json({ error: 'Submit the readiness form to get your score.' }, 405, { Allow: 'POST' });
   if (request.headers.get('Origin') !== new URL(request.url).origin || request.headers.get('Sec-Fetch-Site') === 'cross-site') {
@@ -132,12 +127,16 @@ async function handleReadiness(request, env) {
     if (existing) return retry(existing);
     const now = Date.now();
     const insert = await env.DB.prepare(`INSERT INTO readiness_leads
-      (id, request_hash, first_name, email, company_size, use_case, hardware, score, size_points, task_points, hardware_points, created_at)
-      SELECT ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?
+      (id, request_hash, first_name, email, company_size, use_case, hardware, score, size_points, task_points, hardware_points, created_at, mail_due_at)
+      SELECT ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?
       WHERE (SELECT COUNT(*) FROM readiness_leads WHERE email = ? AND created_at > ?) < 5
-      ON CONFLICT(id) DO NOTHING`).bind(requestId, hash, firstName, email, companySize, useCase, hardware, score, points.size, points.task, points.hardware, now, email, now - 3600000).run();
+      ON CONFLICT(id) DO NOTHING`).bind(requestId, hash, firstName, email, companySize, useCase, hardware, score, points.size, points.task, points.hardware, now, now, email, now - 3600000).run();
     if (!insert.success) throw new Error('storage_failed');
-    if (insert.meta.changes === 1) return receipt(score, points);
+    if (insert.meta.changes === 1) {
+      try { await deliverScorecard(env, requestId); }
+      catch { console.error('Scorecard delivery pending.'); }
+      return receipt(score, points);
+    }
     const concurrent = await find();
     if (concurrent) return retry(concurrent);
     return json({ error: 'Too many submissions from this email. Try again in an hour.' }, 429, { 'Retry-After': '3600' });
@@ -146,8 +145,59 @@ async function handleReadiness(request, env) {
   }
 }
 
+function deliveryCopy(html, env) {
+  if (env.EMAIL_API_KEY && env.SENDER_EMAIL && env.OWNER_EMAIL && !/^(true|1)$/i.test(env.EMAIL_TEST_MODE || '')) return html;
+  return html.replaceAll('Your full scorecard hits your inbox in minutes.', 'Scorecard email is currently unavailable.');
+}
+
+function escapeHtml(value) {
+  return String(value ?? '').replace(/[&<>"']/g, ch => ({'&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;'}[ch]));
+}
+
+async function scorePage(request, env, asset) {
+  const body = new TextDecoder().decode(Uint8Array.from(atob(asset.data), ch => ch.charCodeAt(0)));
+  const booking = /^https:\/\//.test(env.BOOKING_URL || '') ? escapeHtml(env.BOOKING_URL) : '';
+  const page = body.replace('id="readiness-form"', 'id="readiness-form" data-booking="' + booking + '"');
+  function html(content, status = 200) {
+    return new Response(request.method === 'HEAD' ? null : deliveryCopy(content, env), {status, headers:{'Content-Type':'text/html; charset=utf-8','Cache-Control':'no-store','Referrer-Policy':'same-origin'}});
+  }
+  if (request.method === 'GET' || request.method === 'HEAD') return html(page.replace('REQUEST_ID',crypto.randomUUID()));
+  if (request.method !== 'POST') return html('Method not allowed',405);
+  if (request.headers.get('Origin') !== new URL(request.url).origin) return html('Please submit from the Linnake website.',403);
+  if (!request.headers.get('Content-Type')?.startsWith('application/x-www-form-urlencoded')) return html('Invalid form submission.',415);
+  const reader = request.body?.getReader();
+  if (!reader) return html('Empty form.',400);
+  const decoder = new TextDecoder();
+  let input = '', size = 0;
+  while (true) {
+    const chunk = await reader.read();
+    if (chunk.done) break;
+    size += chunk.value.length;
+    if (size > MAX_BODY_BYTES) { await reader.cancel(); return html('Your answers are too long.',413); }
+    input += decoder.decode(chunk.value,{stream:true});
+  }
+  const fields = Object.fromEntries(new URLSearchParams(input + decoder.decode()));
+  const replaceForm = content => page.replace(/<form id="readiness-form"[\s\S]*?<\/form>/, () => content);
+  const fail = (message,status) => html(replaceForm('<p role="alert">' + escapeHtml(message) + '</p><a class="text-link" href="/score">Return to the form</a>'),status);
+  if (!uuid.test(fields.requestId) || fields.website) return fail('Please start the form again.',400);
+  if (!fields.companySize && !('hardware' in fields)) {
+    if (!fields.firstName?.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(fields.email)) return fail('Enter your first name and a valid work email.',400);
+    const hidden = ['firstName','email','requestId','website'].map(key => '<input type="hidden" name="' + key + '" value="' + escapeHtml(fields[key]) + '">').join('');
+    const step = page.match(/<fieldset id="business-step"[\s\S]*?<\/fieldset>/)[0].replace(' hidden disabled','').replace(/<button[^>]*id="back-to-contact"[^>]*>Back<\/button>/,'');
+    return html(replaceForm('<form method="post" action="/score">' + hidden + step + '</form>'));
+  }
+  const response = await handleReadiness(new Request(request.url,{method:'POST',headers:{Origin:request.headers.get('Origin'),'Content-Type':'application/json'},body:JSON.stringify(fields)}),env);
+  const data = await response.json();
+  if (!response.ok) return fail(data.error,response.status);
+  const p = data.points;
+  const hosted = fields.hardware === 'no' ? '<p>No hardware yet? Hosted GPU is an option. Billed by the second.</p>' : '';
+  const next = booking ? ' Want it walked through live? <a class="text-link" href="' + booking + '">Grab 20 minutes.</a>' : '';
+  return html(replaceForm('<h2>' + data.score + '/100</h2><p>' + escapeHtml(data.meaning) + '</p>' + hosted + '<details><summary>How we scored it</summary><p>Company size: ' + p.size + '/20. Task: ' + p.task + '/45. Hardware: ' + p.hardware + '/35.</p></details><p>Your full scorecard hits your inbox in minutes.' + next + '</p>'));
+}
+
 const pageRoutes = {
   '/': '/index.html',
+  '/score': '/score.html',
   '/security': '/security.html',
   '/pricing': '/pricing.html',
   '/product': '/product.html',
@@ -159,13 +209,16 @@ export function createWorker(assets = {}) {
   return {
     async fetch(request, env) {
       const path = new URL(request.url).pathname;
+      if (path === '/api/internal/retry-scorecards') return handleRetryTick(request, env, retryDue);
+      if (['/score','/score.html'].includes(path.replace(/\/$/, '')) && assets['/score.html']) return scorePage(request, env, assets['/score.html']);
       if (path === '/api/readiness') return handleReadiness(request, env);
       if (path === '/api/inquiries') return handleInquiry(request, env);
       if (request.method !== 'GET' && request.method !== 'HEAD') return new Response('Method not allowed', { status: 405, headers: { Allow: 'GET, HEAD' } });
       const asset = assets[pageRoutes[path.replace(/(.+)\/$/, '$1')] ?? path];
       if (!asset) return new Response('Not found', { status: 404 });
       const body = request.method === 'HEAD' ? null : Uint8Array.from(atob(asset.data), char => char.charCodeAt(0));
-      return new Response(body, { headers: { 'Content-Type': asset.type, 'Cache-Control': 'no-cache', 'X-Content-Type-Options': 'nosniff', 'Referrer-Policy': 'strict-origin-when-cross-origin' } });
+      const output = body && (path === '/' || path === '/index.html') ? deliveryCopy(new TextDecoder().decode(body), env) : body;
+      return new Response(output, { headers: { 'Content-Type': asset.type, 'Cache-Control': 'no-cache', 'X-Content-Type-Options': 'nosniff', 'Referrer-Policy': 'strict-origin-when-cross-origin' } });
     }
   };
 }

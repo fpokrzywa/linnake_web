@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#060b12">
+  <title>Linnake | Get your Private AI Readiness Score</title>
+  <meta name="description" content="Get your free Private AI Readiness Score in 2 minutes.">
+  <link rel="icon" href="/assets/linnake-crest.jpg" type="image/jpeg">
+  <link rel="stylesheet" href="/styles.css">
+  <script src="/readiness.js" defer></script>
+</head>
+<body class="landing-page">
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <div class="header-inner wrap">
+      <a class="header-logo" href="/" aria-label="Linnake home"><img src="/assets/linnake-header-logo.png" width="1774" height="887" alt="Linnake"></a>
+      <nav aria-label="Main navigation"><a href="/security">Security</a><a href="/pricing">Pricing</a></nav>
+    </div>
+  </header>
+  <main id="main" class="section wrap support-content score-page">
+    <h1>Get your Private AI Readiness Score</h1>
+        <div class="workspace readiness-card" id="readiness" tabindex="-1">
+          <form id="readiness-form" method="post" action="/score" aria-label="Private AI Readiness Score">
+            <label class="form-trap" aria-hidden="true">Website<input name="website" tabindex="-1" autocomplete="off"></label>
+            <input type="hidden" name="requestId" value="REQUEST_ID">
+            <fieldset id="lead-step" aria-label="Contact details">
+              <label>First name<input name="firstName" autocomplete="given-name" required maxlength="100"></label>
+              <label>Work email<input name="email" type="email" autocomplete="email" required maxlength="200"></label>
+              <button class="button" type="submit">Get My Readiness Score</button>
+            </fieldset>
+            <fieldset id="business-step" aria-label="Business details" hidden disabled>
+              <label class="readiness-size">Company size<select name="companySize" required>
+                  <option value="">Select size</option>
+                  <option value="1–10">1–10</option><option value="11–50">11–50</option>
+                  <option value="51–250">51–250</option><option value="251–1,000">251–1,000</option>
+                  <option value="1,000+">1,000+</option>
+                </select></label>
+              <label>What's the #1 thing you want AI to handle?<input name="useCase" required maxlength="280"></label>
+              <label>Do you have a GPU server or AI-capable machine?<select name="hardware" required>
+                  <option value="">Select one</option><option value="yes">Yes</option>
+                  <option value="no">No</option><option value="unsure">Not sure</option>
+                </select></label>
+              <div class="readiness-actions">
+                <button class="button" type="submit">Get My Readiness Score</button>
+                <button class="text-link" id="back-to-contact" type="button">Back</button>
+              </div>
+            </fieldset>
+            <p id="readiness-error" role="alert"></p>
+          </form>
+          <div id="readiness-result" hidden>
+            <h2 id="score-heading" tabindex="-1"></h2>
+            <p id="score-meaning"></p><p id="hosted-result" hidden>No hardware yet? Hosted GPU is an option. Billed by the second.</p>
+            <details class="score-rules">
+              <summary>How we scored it</summary>
+              <p id="score-breakdown"></p>
+              <p>Company size adds 0–20 points. A task with at least two distinct words adds 20 points. A task with five or more distinct words and a work verb like “review” adds 45 instead. A capable machine adds 35 points. “Not sure” adds 15.</p>
+            </details>
+            <p>Your full scorecard hits your inbox in minutes.<span id="booking-invite" hidden> Want it walked through live? <a class="text-link" id="booking-link">Grab 20 minutes.</a></span></p>
+          </div>
+
+        </div>
+  </main>
+  <footer class="site-footer landing-footer wrap">
+    <nav class="footer-links" aria-label="Footer"><a href="/security">Security</a><a href="/pricing">Pricing</a><a href="/product">Product</a><a href="/privacy">Privacy</a><a href="/terms">Terms</a></nav>
+    <div class="footer-bottom">© 3C Publications LLC.</div>
+  </footer>
+</body>
+</html>

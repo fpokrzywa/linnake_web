@@ -99,3 +99,10 @@ html { scroll-padding-top: 105px; }
 }
 
 .hosted-option {font-size:.875rem;color:var(--muted);line-height:1.45;}
+.score-launch {min-height:56px;padding-inline:32px;font-size:1.1rem}
+.score-page {max-width:660px}
+.score-page h1 {margin-bottom:24px}
+.score-dialog {padding:0;border:0;width:min(510px,calc(100% - 32px));background:var(--surface)}
+.score-dialog .readiness-card {padding-top:55px}
+.score-dialog .close-dialog {z-index:1;font-size:1.5rem;line-height:1}
+@media(max-width:680px){.score-dialog{margin:0;width:100%;height:100dvh;max-width:none;max-height:none;border-radius:0}.score-dialog .readiness-card{min-height:100%;border-radius:0}.score-dialog input,.score-dialog select{font-size:1rem}}

@@ -28,8 +28,8 @@ The site owner can use Sites Settings' database viewer, or ask Codex to read the
 
 ## Readiness leads and scorecards
 
-The homepage posts to `/api/readiness`. The Worker calculates the score and saves the answers, score and point breakdown in `DB` / `readiness_leads` before returning the result. The table is available to the site owner through the Sites database viewer. The existing `inquiries` table and endpoint serve legacy records and submissions.
+The homepage, Pricing and Product open the same two-step form in a dialog. Direct links use `/score`, which also accepts both steps as ordinary HTML form posts. Each new submission saves the answers and score in `readiness_leads` and starts scorecard delivery.
 
-The 24-hour scorecard is a manual follow-up. Check new rows by submission time, review the client's use case and hardware answer, and email the scorecard to the work email in the row. Include the first three tasks, a hardware feasibility assessment, and a rough cost range. The form does not send email or independently verify hardware. Review model, workload, and machine details before treating the score as a pilot recommendation.
+Configure `EMAIL_API_KEY` (Resend), `SENDER_EMAIL` (verified sender), `OWNER_EMAIL` and `QSTASH_TOKEN` (Upstash delayed retries) in the site environment. Set `EMAIL_TEST_MODE=true` to redirect both messages to the owner. Set it to false for lead delivery. `BOOKING_URL` is optional. The on-screen delivery promise is enabled when the email settings are present and test mode is off.
 
-Set `approvedClientQuote` and `bookingUrl` in `public/readiness.js`. The quote field takes one approved line including name, title, and company. With the field blank, the page shows the data-use pledge. The results show a booking link once a real HTTPS URL is configured. Replace `[FOUNDER BIO]` in `public/index.html` with the approved founder line.
+Edit starter tasks and the three optional cost ranges in `SCORECARD_CONFIG` in `worker/mail.mjs`. On failure the worker schedules callbacks at five, ten and fifteen minutes. Each delivery uses its own idempotency key derived from the submission ID. Inspect `scorecard_status`, `scorecard_sent_at`, `scorecard_error`, and the owner delivery fields in the leads table. A sent timestamp means the provider accepted the message.

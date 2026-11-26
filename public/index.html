@@ -26,45 +26,7 @@
         <div class="hero-art readiness-crest"><img src="/assets/linnake-crest.jpg" width="1024" height="1024" alt=""></div>
       </div>
       <div class="readiness-column">
-        <div class="workspace readiness-card" id="readiness" tabindex="-1">
-          <form id="readiness-form" method="post" action="/api/readiness" aria-label="Private AI Readiness Score">
-            <label class="form-trap" aria-hidden="true">Website<input name="website" tabindex="-1" autocomplete="off"></label>
-            <fieldset id="lead-step" aria-label="Contact details">
-              <label>First name<input name="firstName" autocomplete="given-name" required maxlength="100"></label>
-              <label>Work email<input name="email" type="email" autocomplete="email" required maxlength="200"></label>
-              <button class="button" type="submit">Get My Readiness Score</button>
-            </fieldset>
-            <fieldset id="business-step" aria-label="Business details" hidden disabled>
-              <label class="readiness-size">Company size<select name="companySize" required>
-                  <option value="">Select size</option>
-                  <option value="1–10">1–10</option><option value="11–50">11–50</option>
-                  <option value="51–250">51–250</option><option value="251–1,000">251–1,000</option>
-                  <option value="1,000+">1,000+</option>
-                </select></label>
-              <label>What's the #1 thing you want AI to handle?<input name="useCase" required maxlength="280"></label>
-              <label>Do you have a GPU server or AI-capable machine?<select name="hardware" required>
-                  <option value="">Select one</option><option value="yes">Yes</option>
-                  <option value="no">No</option><option value="unsure">Not sure</option>
-                </select></label>
-              <div class="readiness-actions">
-                <button class="button" type="submit">Get My Readiness Score</button>
-                <button class="text-link" id="back-to-contact" type="button">Back</button>
-              </div>
-            </fieldset>
-            <p id="readiness-error" role="alert"></p>
-          </form>
-          <div id="readiness-result" hidden>
-            <h2 id="score-heading" tabindex="-1"></h2>
-            <p id="score-meaning"></p><p id="hosted-result" hidden>No hardware? Hosted GPU is an option. Billed by the second.</p>
-            <details class="score-rules">
-              <summary>How we scored it</summary>
-              <p id="score-breakdown"></p>
-              <p>Company size adds 0–20 points. A task with at least two distinct words adds 20 points. A task with five or more distinct words and a work verb like “review” adds 45 instead. A capable machine adds 35 points. “Not sure” adds 15.</p>
-            </details>
-            <p>Your full scorecard lands within 24 hours.<span id="booking-invite" hidden> Want it walked through live? <a class="text-link" id="booking-link">Grab 20 minutes.</a></span></p>
-          </div>
-          <noscript><p>Turn on JavaScript to get your score.</p></noscript>
-        </div>
+        <a class="button score-launch" id="readiness" href="/score">Get My Readiness Score</a>
         <p class="readiness-proof" id="readiness-proof">Fine-tuned on your hardware. Your data never leaves your control.</p>
       </div>
     </section>
@@ -81,7 +43,7 @@
         <h2 id="how-it-works">How it works</h2>
         <ol>
           <li>Answer 4 questions. Under 2 minutes.</li>
-          <li>See your score instantly. Full scorecard hits your inbox within 24 hours.</li>
+          <li>See your score instantly. Your full scorecard hits your inbox in minutes.</li>
           <li>We fine-tune an open-weight model on your data, on your hardware.</li>
         </ol>
       </section>
@@ -93,7 +55,7 @@
     </div>
     <section class="closing-section" aria-labelledby="closing-heading"><div class="wrap closing-inner">
       <h2 id="closing-heading">Get your score in 2 minutes</h2>
-      <a class="button button-secondary" href="#readiness">Get My Readiness Score</a>
+      <a class="button score-launch" href="/score">Get My Readiness Score</a>
     </div></section>
   </main>
   <footer class="site-footer landing-footer wrap">
