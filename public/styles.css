@@ -97,3 +97,5 @@ html { scroll-padding-top: 105px; }
   .readiness-actions { gap: 8px; }
   .readiness-hero .readiness-actions .button { padding-inline: 7px; }
 }
+
+.hosted-option {font-size:.875rem;color:var(--muted);line-height:1.45;}

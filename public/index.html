@@ -21,7 +21,7 @@
   <main id="main">
     <section class="hero readiness-hero wrap" aria-labelledby="hero-heading">
       <div class="hero-copy">
-        <h1 id="hero-heading">Your own AI. Trained on your business. Your data stays yours.</h1>
+        <h1 id="hero-heading">Your own AI. Fine-tuned on your business. On your hardware.</h1>
         <p class="hero-description">Get your Private AI Readiness Score (0 to 100) in 2 minutes. Free.</p>
         <div class="hero-art readiness-crest"><img src="/assets/linnake-crest.jpg" width="1024" height="1024" alt=""></div>
       </div>
@@ -55,7 +55,7 @@
           </form>
           <div id="readiness-result" hidden>
             <h2 id="score-heading" tabindex="-1"></h2>
-            <p id="score-meaning"></p>
+            <p id="score-meaning"></p><p id="hosted-result" hidden>No hardware? Hosted GPU is an option. Billed by the second.</p>
             <details class="score-rules">
               <summary>How we scored it</summary>
               <p id="score-breakdown"></p>
@@ -65,7 +65,7 @@
           </div>
           <noscript><p>Turn on JavaScript to get your score.</p></noscript>
         </div>
-        <p class="readiness-proof" id="readiness-proof">Your data never trains anyone else's model. Ever.</p>
+        <p class="readiness-proof" id="readiness-proof">Fine-tuned on your hardware. Your data never leaves your control.</p>
       </div>
     </section>
     <div class="readiness-details wrap">
@@ -73,8 +73,8 @@
         <h2 id="score-tells-you">Your score tells you:</h2>
         <ul>
           <li>Your readiness score out of 100, on screen the moment you hit submit.</li>
-          <li>The first 3 tasks AI should take off your team's plate.</li>
-          <li>Whether your hardware can run it, or exactly what you'd need, with a rough cost range.</li>
+          <li>The first 3 tasks a fine-tuned model should take off your team's plate.</li>
+          <li>Whether your own machines can fine-tune and run it, or exactly what to add, with a rough cost range.</li>
         </ul>
       </section>
       <section aria-labelledby="how-it-works">
@@ -82,12 +82,13 @@
         <ol>
           <li>Answer 4 questions. Under 2 minutes.</li>
           <li>See your score instantly. Full scorecard hits your inbox within 24 hours.</li>
-          <li>Want to go deeper? Book a 20-minute call. Optional.</li>
+          <li>We fine-tune an open-weight model on your data, on your hardware.</li>
         </ol>
       </section>
+      <p class="hosted-option">No hardware yet? We'll run it on a hosted GPU. You pay by the second, only while it runs.</p>
       <section aria-label="Why Linnake">
-        <p>[FOUNDER BIO]</p>
-        <p>Built for companies that can't send their data to public AI.</p>
+        <p>Your data never fine-tunes anyone else's model. Ever.</p>
+        <p id="founder" hidden></p>
       </section>
     </div>
     <section class="closing-section" aria-labelledby="closing-heading"><div class="wrap closing-inner">
@@ -96,7 +97,7 @@
     </div></section>
   </main>
   <footer class="site-footer landing-footer wrap">
-    <nav class="footer-links" aria-label="Footer"><a href="/security">Security</a><a href="/pricing">Pricing</a><a href="/privacy">Privacy</a><a href="/terms">Terms</a><a href="/product">Product</a></nav>
+    <nav class="footer-links" aria-label="Footer"><a href="/security">Security</a><a href="/pricing">Pricing</a><a href="/product">Product</a><a href="/privacy">Privacy</a><a href="/terms">Terms</a></nav>
     <div class="footer-bottom">© 3C Publications LLC.</div>
   </footer>
 </body>

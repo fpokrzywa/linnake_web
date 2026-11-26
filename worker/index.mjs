@@ -82,7 +82,8 @@ function scoreTask(useCase) {
   return words.size >= 5 && workVerbs.test(useCase) ? 45 : 20;
 }
 
-function scoreMeaning(score) {
+function scoreMeaning(score, hardware) {
+  if (hardware === 'yes' && score >= 70) return 'You’re ready to scope a pilot on your own hardware.';
   if (score >= 70) return 'You’re ready to scope a pilot.';
   if (score >= 40) return 'You have a starting point. Confirm the task or hardware first.';
   return 'Define one task and check what it would take to run it.';
@@ -120,7 +121,7 @@ async function handleReadiness(request, env) {
   const score = points.size + points.task + points.hardware;
   const fingerprint = JSON.stringify([firstName, email, companySize, useCase, hardware]);
   const hash = [...new Uint8Array(await crypto.subtle.digest('SHA-256', new TextEncoder().encode(fingerprint)))].map(byte => byte.toString(16).padStart(2, '0')).join('');
-  const receipt = (score, points) => json({ score, points, meaning: scoreMeaning(score) }, 201);
+  const receipt = (score, points) => json({ score, points, meaning: scoreMeaning(score, hardware) }, 201);
   const find = () => env.DB.prepare('SELECT request_hash, score, size_points, task_points, hardware_points FROM readiness_leads WHERE id = ?').bind(requestId).first();
   const retry = row => row.request_hash === hash
     ? receipt(row.score, { size: row.size_points, task: row.task_points, hardware: row.hardware_points })

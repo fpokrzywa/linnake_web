@@ -1,9 +1,22 @@
 // Fill these only with the approved quote and the founder's actual booking URL.
 const settings = {
+  founderBio: '',
+  hostedRate: '',
   approvedClientQuote: '', // [BETA_CLIENT_QUOTE] — [NAME, TITLE, COMPANY]
   bookingUrl: '', // [BOOKING_LINK]
 };
 
+const usable = value => value.trim() && !/[\[\]]/.test(value);
+const price = document.getElementById('hosted-price');
+if (price && usable(settings.hostedRate)) price.textContent = 'No hardware yet? Hosted GPU, billed per second of use: ' + settings.hostedRate;
+if (document.getElementById('readiness-form')) initializeForm();
+
+function initializeForm() {
+const founder = document.getElementById('founder');
+if (usable(settings.founderBio)) {
+  founder.textContent = settings.founderBio;
+  founder.hidden = false;
+}
 const form = document.getElementById('readiness-form');
 const contact = document.getElementById('lead-step');
 const business = document.getElementById('business-step');
@@ -13,7 +26,7 @@ const scoreHeading = document.getElementById('score-heading');
 let previousPayload;
 let requestId;
 
-if (settings.approvedClientQuote.trim()) {
+if (usable(settings.approvedClientQuote)) {
   document.getElementById('readiness-proof').textContent = settings.approvedClientQuote.trim();
 }
 if (settings.bookingUrl.startsWith('https://')) {
@@ -85,6 +98,7 @@ form.addEventListener('submit', async (event) => {
     if (!Number.isInteger(data.score) || !data.points) throw new Error();
     scoreHeading.textContent = `${data.score}/100`;
     document.getElementById('score-meaning').textContent = data.meaning;
+    document.getElementById('hosted-result').hidden = payload.hardware !== 'no';
     document.getElementById('score-breakdown').textContent = `Company size: ${data.points.size}/20. Task: ${data.points.task}/45. Hardware: ${data.points.hardware}/35.`;
     form.hidden = true;
     result.hidden = false;
@@ -101,3 +115,5 @@ form.addEventListener('submit', async (event) => {
     submit.textContent = 'Get My Readiness Score';
   }
 });
+
+}
